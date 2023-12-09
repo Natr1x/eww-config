@@ -15,3 +15,37 @@
 (defwidget window_w [screen]
   (box
     (label :text "${window}")))
+
+
+; Following along with the tutorial
+
+(defpoll time :interval "5s"
+  `date +'{"hour":"%H","min":"%M","second":"%S"}'`)
+
+(defwidget powermenu_layout []
+  (box :orientation "vertical" :class "bx"
+    (box :orientation "horizontal" :class "bx"
+      (label :text "${time.hour}:${time.min}" :tooltip "The time right now")
+      (circular-progress
+        :value "${EWW_BATTERY['BAT0'].capacity}"
+        :tooltip "BAT0: ${EWW_BATTERY['BAT0'].status}")
+    )
+    (box :orientation "horizontal" :class "bx"
+      (label :text "${EWW_CPU.avg}")
+      (graph
+        :value "${EWW_CPU.avg}"
+        :time-range "60000ms"
+        :dynamic true)
+    )
+  )
+)
+
+(defwindow powermenu
+  :monitor 0
+  :stacking "fg"
+  :windowtype "normal"
+  :wm-ignore true
+  :geometry (geometry
+              :width "20%"
+              :height "20%")
+  (powermenu_layout))
