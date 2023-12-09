@@ -22,13 +22,19 @@
 (defpoll time :interval "5s"
   `date +'{"hour":"%H","min":"%M","second":"%S"}'`)
 
+(defwidget battery_indicator []
+  (overlay
+    (circular-progress
+      :value "${EWW_BATTERY['BAT0'].capacity}"
+      :tooltip "BAT0: ${EWW_BATTERY['BAT0'].status}")
+    (label :text "${EWW_BATTERY['BAT0'].capacity}%"))
+)
+
 (defwidget powermenu_layout []
   (box :orientation "vertical" :class "bx"
     (box :orientation "horizontal" :class "bx"
       (label :text "${time.hour}:${time.min}" :tooltip "The time right now")
-      (circular-progress
-        :value "${EWW_BATTERY['BAT0'].capacity}"
-        :tooltip "BAT0: ${EWW_BATTERY['BAT0'].status}")
+      (battery_indicator)
     )
     (box :orientation "horizontal" :class "bx"
       (label :text "${EWW_CPU.avg}")
