@@ -27,24 +27,22 @@
     (circular-progress
       :value "${EWW_BATTERY['BAT0'].capacity}"
       :tooltip "BAT0: ${EWW_BATTERY['BAT0'].status}")
-    (label :text "${EWW_BATTERY['BAT0'].capacity}%"))
-)
+    (label :text "${EWW_BATTERY['BAT0'].capacity}%")))
+
+(defwidget cpu_indicator []
+  (overlay
+    (graph
+      :value "${EWW_CPU.avg}"
+      :time-range "60000ms"
+      :tooltip "${round(EWW_CPU.avg, 2)}%")
+    (label :text "${round(EWW_CPU.avg, 2)}%")))
 
 (defwidget powermenu_layout []
-  (box :orientation "vertical" :class "bx"
-    (box :orientation "horizontal" :class "bx"
-      (label :text "${time.hour}:${time.min}" :tooltip "The time right now")
-      (battery_indicator)
-    )
-    (box :orientation "horizontal" :class "bx"
-      (label :text "${EWW_CPU.avg}")
-      (graph
-        :value "${EWW_CPU.avg}"
-        :time-range "60000ms"
-        :dynamic true)
-    )
-  )
-)
+  (box :orientation "horizontal" :class "bx"
+    (label :text "${time.hour}:${time.min}" :tooltip "The time right now")
+    (battery_indicator)
+    (cpu_indicator)
+  ))
 
 (defwindow powermenu
   :monitor 0
@@ -53,5 +51,5 @@
   :wm-ignore true
   :geometry (geometry
               :width "20%"
-              :height "20%")
+              :height "6%")
   (powermenu_layout))
