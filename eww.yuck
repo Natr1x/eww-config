@@ -1,23 +1,4 @@
-(deflisten workspaces :initial "[]" "bash ~/.config/eww/scripts/get-workspaces.sh")
-(deflisten current_workspace :initial "1" "bash ~/.config/eww/scripts/get-active-workspace.sh")
-(defwidget workspaces [screen]
-  (eventbox
-    :onscroll "bash ~/.config/eww/scripts/change-active-workspace.sh {} ${current_workspace}"
-    :class "workspaces-widget"
-      (box :space-evenly true
-        (label :text "${workspaces}${current_workspace}" :visible false)
-        (for workspace in workspaces
-          (eventbox :onclick "hyprctl dispatch workspace ${workspace.id}"
-            (box :class "workspace-entry ${workspace.id == current_workspace ? "current" : ""} ${workspace.windows > 0 ? "occupied" : "empty"}"
-              (label :text "${workspace.id}")))))))
-
-(deflisten window :initial "..." "sh ~/.config/eww/scripts/get-window-title.sh")
-(defwidget window_w [screen]
-  (box
-    (label :text "${window}")))
-
-
-; Following along with the tutorial
+;; Display basic system info
 
 (defpoll time :interval "5s"
   `date +'{"hour":"%H","min":"%M","second":"%S"}'`)
@@ -35,21 +16,47 @@
       :value "${EWW_CPU.avg}"
       :time-range "60000ms"
       :tooltip "${round(EWW_CPU.avg, 2)}%")
-    (label :text "${round(EWW_CPU.avg, 2)}%")))
+    (label :text "${round(EWW_CPU.avg, 0)}%")))
 
-(defwidget powermenu_layout []
-  (box :orientation "horizontal" :class "bx"
-    (label :text "${time.hour}:${time.min}" :tooltip "The time right now")
+(defwidget clock_indicator []
+  (label :text "${time.hour}:${time.min}" :tooltip "The time right now"))
+
+(defwidget systeminfo_layout []
+  (box :orientation "v" :class "bx"
+    (clock_indicator)
     (battery_indicator)
     (cpu_indicator)
   ))
 
-(defwindow powermenu
+(defwindow systeminfo
   :monitor 0
   :stacking "fg"
   :windowtype "normal"
   :wm-ignore true
+  ;; :focusable true
   :geometry (geometry
-              :width "20%"
-              :height "6%")
-  (powermenu_layout))
+              :anchor "center right"
+              :width "4%"
+              :height "22%")
+  (systeminfo_layout))
+
+;; Old stuff that I may use later
+
+;; (deflisten workspaces :initial "[]" "bash ~/.config/eww/scripts/get-workspaces.sh")
+;; (deflisten current_workspace :initial "1" "bash ~/.config/eww/scripts/get-active-workspace.sh")
+;; (defwidget workspaces [screen]
+;;   (eventbox
+;;     :onscroll "bash ~/.config/eww/scripts/change-active-workspace.sh {} ${current_workspace}"
+;;     :class "workspaces-widget"
+;;       (box :space-evenly true
+;;         (label :text "${workspaces}${current_workspace}" :visible false)
+;;         (for workspace in workspaces
+;;           (eventbox :onclick "hyprctl dispatch workspace ${workspace.id}"
+;;             (box :class "workspace-entry ${workspace.id == current_workspace ? "current" : ""} ${workspace.windows > 0 ? "occupied" : "empty"}"
+;;               (label :text "${workspace.id}")))))))
+;;
+;; (deflisten window :initial "..." "sh ~/.config/eww/scripts/get-window-title.sh")
+;; (defwidget window_w [screen]
+;;   (box
+;;     (label :text "${window}")))
+
