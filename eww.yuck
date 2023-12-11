@@ -3,12 +3,36 @@
 (defpoll time :interval "5s"
   `date +'{"hour":"%H","min":"%M","second":"%S"}'`)
 
+;; 󰂎 󰁺 󰁻 󰁼 󰁽 󰁾 󰁿 󰂀 󰂁 󰂂 󰁹 
+;; 󱊡 󱊢 󱊣 
+;; 󰢟 󰢜 󰂆 󰂇 󰂈 󰢝 󰂉 󰢞 󰂊 󰂋 󰂅 
+;; 󱊤 󱊥 󱊦 
+
+;; 󰤾 󰤿 󰥀 󰥁 󰥂 󰥃 󰥄 󰥅 󰥆 󰥇 󰥉
+;; 󱃌 󱟞 󱟠 
+;; 󰂃 
+;; 󰥈 󰂄 󱟢 󱧥 󱈏 󱞜 󱟤 󰂍 󱟦 󰂐 󱉝 
+
+
+;; "󰢟 ", "󰢜 ", "󰂆 ", "󰂇 ", "󰂈 ", "󰢝 ", "󰂉 ", "󰢞 ", "󰂊 ", "󰂋 ", "󰂅 ", 
+;; "󰢟", "󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅",
+
+
+(defwidget battery_icon [status capacity]
+  (label :text "${{
+    "Discharging": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+    "Charging": ["󰢟", "󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"]
+  }[status][round(capacity / 10, 0)]}"))
+
 (defwidget battery_indicator []
   (overlay
+    :tooltip "${EWW_BATTERY['BAT0'].status} ${EWW_BATTERY['BAT0'].capacity}%"
     (circular-progress
-      :value "${EWW_BATTERY['BAT0'].capacity}"
-      :tooltip "BAT0: ${EWW_BATTERY['BAT0'].status}")
-    (label :text "${EWW_BATTERY['BAT0'].capacity}%")))
+      :thickness {EWW_BATTERY['BAT0'].status == "Charging" ? 2 : EWW_BATTERY['BAT0'].capacity / 50}
+      :value "${EWW_BATTERY['BAT0'].capacity}")
+    (battery_icon :status "${EWW_BATTERY['BAT0'].status}"
+                  :capacity "${EWW_BATTERY['BAT0'].capacity}")
+  ))
 
 (defwidget cpu_indicator []
   (overlay
@@ -23,9 +47,9 @@
 
 (defwidget systeminfo_layout []
   (box :orientation "v" :class "bx"
-    (clock_indicator)
-    (battery_indicator)
     (cpu_indicator)
+    (battery_indicator)
+    (clock_indicator)
   ))
 
 (defwindow systeminfo
@@ -33,9 +57,9 @@
   :stacking "fg"
   :windowtype "normal"
   :wm-ignore true
-  ;; :focusable true
   :geometry (geometry
               :anchor "center right"
+              ;; :x "3px"
               :width "4%"
               :height "22%")
   (systeminfo_layout))

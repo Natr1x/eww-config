@@ -2,13 +2,51 @@
   all: unset;
 }
 
+/** General **/
+.module {
+    margin: 0px 0px 0px 0px;
+    border-radius: 10px 16px 0px 10px;
+}
+
+/** tooltip!! **/
+tooltip.background {
+    background-color: #0f0f17;
+    font-size: 18;
+    border-radius: 10px;
+    color: #bfc9db;
+}
+
 window {
-  background: #282828;
+  // background: #282828;
+  background: rgba(#1e302c, 0.8);
+  border-radius: 16px 0px 0px 16px;
   color: #ebdbb2;
   font-size: 14px;
 
+  border-top: 2px solid #8eb06c;
+  border-left: 2px solid #8ec07c;
+  border-bottom: 2px solid #9ee08c;
+
   & > * {
-    margin: 3px;
+    margin: 4px;
+    margin-right: 1px;
+    margin-left: 6px;
+  }
+}
+
+.bx {
+  widget {
+    background: #888974;
+
+    &:active {
+      background: #8ec07c;
+    }
+    &:hover {
+      background: #8ec07c;
+    }
+    &.inactive {
+      background: #888974;
+    }
   }
 }
 
@@ -85,10 +123,6 @@ window {
   padding-bottom: 7px;
   color: #a89984;
 }
-
-
-
-
 
 .music_popup {
   all: unset;
