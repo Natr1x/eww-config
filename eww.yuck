@@ -14,10 +14,6 @@
 ;; 󰥈 󰂄 󱟢 󱧥 󱈏 󱞜 󱟤 󰂍 󱟦 󰂐 󱉝 
 
 
-;; "󰢟 ", "󰢜 ", "󰂆 ", "󰂇 ", "󰂈 ", "󰢝 ", "󰂉 ", "󰢞 ", "󰂊 ", "󰂋 ", "󰂅 ", 
-;; "󰢟", "󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅",
-
-
 (defwidget battery_icon [status capacity]
   (label :text "${{
     "Discharging": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
@@ -63,6 +59,20 @@
               :width "4%"
               :height "22%")
   (systeminfo_layout))
+
+(deflisten brightness :initial "42" "/sys/class/backlight/intel_backlight/actual_brightness")
+
+(defwindow brightnessinfo
+  :monitor 0
+  :stacking "fg"
+  :windowtype "normal"
+  :wm-ignore true
+  :geometry (geometry
+              :anchor "center"
+              ;; :x "3px"
+              :width "10%"
+              :height "4%")
+  (label :text brightness))
 
 ;; Old stuff that I may use later
 
