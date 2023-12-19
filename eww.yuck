@@ -41,11 +41,14 @@
 (defwidget clock_indicator []
   (label :text "${time.hour}:${time.min}" :tooltip "The time right now"))
 
+(deflisten volume :initial "42" "bash ~/.config/eww/scripts/volume.sh")
+
 (defwidget systeminfo_layout []
   (box :orientation "v" :class "bx"
     (cpu_indicator)
     (battery_indicator)
     (clock_indicator)
+    ;; (label :text {volume})
   ))
 
 (defwindow systeminfo
