@@ -17,7 +17,8 @@
 (defwidget battery_icon [status capacity]
   (label :text "${{
     "Discharging": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
-    "Charging": ["󰢟", "󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"]
+    "Charging": ["󰢟", "󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"],
+    "Full": ["󰢟", "󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂄"]
   }[status][round(capacity / 10, 0)]}"))
 
 (defwidget battery_indicator []
@@ -41,14 +42,34 @@
 (defwidget clock_indicator []
   (label :text "${time.hour}:${time.min}" :tooltip "The time right now"))
 
-(deflisten volume :initial "42" "bash ~/.config/eww/scripts/volume.sh")
+(deflisten volume
+  :initial `bash ~/.config/eww/scripts/volume.sh`
+  `bash ~/.config/eww/scripts/volume.sh --watch`)
+
+;; nf-fa-volume_down,f027,
+;; nf-fa-volume_off,f026,
+;; nf-fa-volume_up,f028,
+;; nf-md-volume_high,f057e,󰕾
+;; nf-md-volume_low,f057f,󰕿
+;; nf-md-volume_medium,f0580,󰖀
+;; nf-md-volume_off,f0581,󰖁
+;; nf-md-volume_variant_off,f0e08,󰸈
+
+(defwidget volume_indicator []
+  (overlay
+    :tooltip "${EWW_BATTERY['BAT0'].status} ${EWW_BATTERY['BAT0'].capacity}%"
+    (circular-progress
+      :thickness {EWW_BATTERY['BAT0'].status == "Charging" ? 2 : EWW_BATTERY['BAT0'].capacity / 50}
+      :value "${EWW_BATTERY['BAT0'].capacity}")
+    (battery_icon :status "${EWW_BATTERY['BAT0'].status}"
+                  :capacity "${EWW_BATTERY['BAT0'].capacity}")
+  ))
 
 (defwidget systeminfo_layout []
   (box :orientation "v" :class "bx"
     (cpu_indicator)
     (battery_indicator)
     (clock_indicator)
-    ;; (label :text {volume})
   ))
 
 (defwindow systeminfo
