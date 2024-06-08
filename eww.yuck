@@ -82,7 +82,7 @@
   :geometry (geometry
               :anchor "center right"
               ;; :x "3px"
-              :width "4%"
+              :width "5%"
               :height "22%")
   (systeminfo_layout))
 
